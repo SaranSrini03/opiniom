@@ -1,7 +1,10 @@
 {
   "name": "opiniom",
-  "private":true,
-  "workspaces":["apps/*","packages/*"],
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,5 +14,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.0"
+  }
 }

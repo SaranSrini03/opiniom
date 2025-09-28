@@ -1,6 +1,15 @@
-import Image from "next/image";
-
+"use client";
+import { useRouter } from 'next/navigation';
 export default function Home() {
+  const router = useRouter();
+
+  const handleClickForSignup = () => {
+    router.push('/auth/signup'); // navigate to signup page
+  };
+
+  const handleClickForLogin = () => {
+    router.push('/auth/login'); // navigate to signup page
+  };
   return (
     <div className="min-h-screen bg-black font-mono flex flex-col">
       <main className="flex-grow flex flex-col items-center justify-center p-8">
@@ -18,11 +27,11 @@ export default function Home() {
 
           {/* Call to Action */}
           <div className="flex flex-col sm:flex-row gap-6 mb-20">
-            <button className="px-10 py-4 bg-white text-black text-lg font-medium  transition-all duration-300 hover:bg-gray-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white cursor-pointer shadow-lg hover:shadow-xl active:scale-95">
+            <button onClick={handleClickForSignup} className="px-10 py-4 bg-white text-black text-lg font-medium  transition-all duration-300 hover:bg-gray-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white cursor-pointer shadow-lg hover:shadow-xl active:scale-95">
               Get Started
             </button>
-            <button className="px-10 py-4 bg-black text-white text-lg font-medium    border-2 border-white transition-all duration-300 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white cursor-pointer shadow-lg hover:shadow-xl active:scale-95">
-              Learn More
+            <button onClick={handleClickForLogin} className="px-10 py-4 bg-black text-white text-lg font-medium    border-2 border-white transition-all duration-300 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white cursor-pointer shadow-lg hover:shadow-xl active:scale-95">
+              Welcome Back
             </button>
           </div>
         </div>
