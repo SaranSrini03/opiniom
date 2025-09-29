@@ -1,46 +1,31 @@
-"use client";
-import { useRouter } from 'next/navigation';
-export default function Home() {
-  const router = useRouter();
+'use client';
 
-  const handleClickForSignup = () => {
-    router.push('/auth/signup'); // navigate to signup page
-  };
+import { useEffect, useState } from 'react';
+import { supabase } from '@/app/lib/supabaseClient';
+import Welcome from '@/app/components/Welcome';
+import Home from '@/app/components/Home'; // your actual home component
 
-  const handleClickForLogin = () => {
-    router.push('/auth/login'); // navigate to signup page
-  };
-  return (
-    <div className="min-h-screen bg-black font-mono flex flex-col">
-      <main className="flex-grow flex flex-col items-center justify-center p-8">
-        <div className="max-w-4xl w-full flex flex-col items-center justify-center text-center">
+export default function Page() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-          {/* Logo/Brand */}
-          <div className="mb-12">
-            <h1 className="text-6xl md:text-7xl font-bold tracking-tight text-white mb-4">
-              OPINIOM
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-4">
-              Change starts when you speak.
-            </p>
-          </div>
+  useEffect(() => {
+    const session = supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+      setLoading(false);
+    });
 
-          {/* Call to Action */}
-          <div className="flex flex-col sm:flex-row gap-6 mb-20">
-            <button onClick={handleClickForSignup} className="px-10 py-4 bg-white text-black text-lg font-medium  transition-all duration-300 hover:bg-gray-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white cursor-pointer shadow-lg hover:shadow-xl active:scale-95">
-              Get Started
-            </button>
-            <button onClick={handleClickForLogin} className="px-10 py-4 bg-black text-white text-lg font-medium    border-2 border-white transition-all duration-300 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white cursor-pointer shadow-lg hover:shadow-xl active:scale-95">
-              Welcome Back
-            </button>
-          </div>
-        </div>
-      </main>
+    // Optional: listen for auth state changes
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
 
-      <footer className="py-6 text-center text-gray-400 text-sm">
-        <p>© {new Date().getFullYear()} Opiniom [nc@031]. All rights reserved.</p>
-      </footer>
-    </div>
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
-  );
+  if (loading) return <p className="text-center mt-10 text-gray-500">Loading...</p>;
+
+  return user ? <Home /> : <Welcome />;
 }

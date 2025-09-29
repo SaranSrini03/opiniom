@@ -10,13 +10,14 @@ const supabaseAdmin = createClient(
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, full_name, username, date_of_birth } = body;
+    const { id, full_name, username, date_of_birth, email } = body; // include email
 
     const { error } = await supabaseAdmin.from('profiles').insert({
       id,
       full_name,
       username,
       date_of_birth,
+      email, // store email
     });
 
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });

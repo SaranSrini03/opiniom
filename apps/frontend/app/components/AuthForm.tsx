@@ -21,45 +21,68 @@ export default function AuthForm({ mode }: { mode: AuthMode }) {
   // UI state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setMessage(null);
     setLoading(true);
 
     try {
       if (mode === 'signup') {
         // 1️⃣ Sign up user
-        const { data, error: signUpError } = await supabase.auth.signUp({
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
         });
         if (signUpError) throw signUpError;
 
-        if (data.user) {
-          // 2️⃣ Call server API to insert profile
+        if (signUpData.user) {
+          // 2️⃣ Insert profile via API
           const response = await fetch('/api/createProfile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              id: data.user.id,
+              id: signUpData.user.id,
               full_name: fullName,
               username,
               date_of_birth: dob,
+              email: signUpData.user.email, // store email too
             }),
           });
 
           const result = await response.json();
           if (!response.ok) throw new Error(result.error || 'Failed to create profile');
+
+          // Store profile in localStorage
+          localStorage.setItem(
+            'user',
+            JSON.stringify({ id: signUpData.user.id, email: signUpData.user.email, username })
+          );
         }
 
-        setMessage('Signup successful! Check your email to confirm your account.');
+        router.push('/auth/login'); // redirect after signup
       } else {
         // Login
-        const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
+        const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
         if (loginError) throw loginError;
+
+        if (loginData.user) {
+          // Fetch profile from table
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('email', email)
+            .single();
+
+          if (profileError) throw profileError;
+
+          // Store profile in localStorage
+          localStorage.setItem('user', JSON.stringify(profileData));
+        }
+
         router.push('/'); // redirect after login
       }
     } catch (err: any) {
@@ -73,47 +96,16 @@ export default function AuthForm({ mode }: { mode: AuthMode }) {
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
       {mode === 'signup' && (
         <>
-          <Input
-            label="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          />
-          <Input
-            label="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <Input
-            label="Date of Birth"
-            type="date"
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
-            required
-          />
+          <Input label="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+          <Input label="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <Input label="Date of Birth" type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
         </>
       )}
 
-      <Input
-        label="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-
-      <Input
-        label="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        minLength={6}
-      />
+      <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+      <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
 
       {error && <p className="text-sm text-red-600">{error}</p>}
-      {message && <p className="text-sm text-green-600">{message}</p>}
 
       <Button type="submit" loading={loading}>
         {mode === 'signup' ? 'Create account' : 'Sign in'}
