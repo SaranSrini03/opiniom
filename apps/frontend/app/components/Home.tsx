@@ -1,6 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import Left from './Left';
+import Middle from './Middle';
+import Right from './Right';
 
 export default function Home() {
   const [username, setUsername] = useState('User');
@@ -42,8 +45,22 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen font-mono flex items-center justify-center bg-black">
-      <h1 className="text-4xl text-white font-bold">Hello {username}!</h1>
+    <div className="min-h-screen font-mono flex bg-black text-white justify-center">
+      {/* Left Sidebar */}
+      <div className="flex-shrink-0 w-[275px]">
+        <Left />
+      </div>
+
+      {/* Middle Feed */}
+      <div className="flex-shrink-0 w-[600px] border-l border-r border-gray-800">
+        <Middle />
+      </div>
+
+      {/* Right Sidebar */}
+      <div className="flex-shrink-0 w-[350px] hidden xl:block">
+        <Right />
+      </div>
     </div>
   );
 }
+/* <h1 className="text-4xl text-white font-bold">Hello {username}!</h1> */

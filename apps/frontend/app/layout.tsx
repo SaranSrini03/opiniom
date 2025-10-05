@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Jersey_15, Teko } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,6 +16,17 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Opiniom",
 };
+
+const jersey15 = Jersey_15({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const teko = Teko({
+  subsets: ["latin"],
+  variable: "--font-teko",
+});
+
 
 export default function RootLayout({
   children,
