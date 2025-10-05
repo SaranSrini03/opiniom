@@ -9,12 +9,9 @@ import {
 } from 'react-icons/hi';
 import { 
   RiChat3Line, 
-  RiChat3Fill,
   RiHeartLine,
   RiHeartFill,
-  RiShareLine,
   RiBarChartLine,
-  RiBarChartFill,
   RiRepeatLine,
   RiRepeatFill
 } from 'react-icons/ri';

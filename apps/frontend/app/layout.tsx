@@ -17,15 +17,9 @@ export const metadata: Metadata = {
   title: "Opiniom",
 };
 
-const jersey15 = Jersey_15({
-  weight: "400",
-  subsets: ["latin"],
-});
 
-const teko = Teko({
-  subsets: ["latin"],
-  variable: "--font-teko",
-});
+
+
 
 
 export default function RootLayout({
