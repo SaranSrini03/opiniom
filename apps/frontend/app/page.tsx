@@ -7,14 +7,22 @@ import Home from '@/app/components/Home'; // your actual home component
 
 export default function Page() {
   const [user, setUser] = useState<any>(null);
-  const [loading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Get initial session
+    const getInitialSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+      setLoading(false);
+    };
 
+    getInitialSession();
 
     // Optional: listen for auth state changes
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      setLoading(false);
     });
 
     return () => {
