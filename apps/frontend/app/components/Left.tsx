@@ -1,6 +1,7 @@
 // components/Left.tsx
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   HomeIcon,
   HashtagIcon,
@@ -107,9 +108,11 @@ const Left = () => {
           className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 cursor-pointer transition-colors"
           onClick={handleLogout}
         >
-          <img
+          <Image
             src="https://i.pravatar.cc/40"
             alt="User Avatar"
+            width={40}
+            height={40}
             className="w-10 h-10 rounded-full"
           />
           <div className="hidden lg:flex flex-col">

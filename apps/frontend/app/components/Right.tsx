@@ -1,5 +1,6 @@
 // components/Right.tsx
 import React from 'react';
+import Image from 'next/image';
 
 const trendingTopics = [
   { topic: 'ReactJS', Takes: '120K Takes' },
@@ -45,7 +46,7 @@ const Right = () => {
           {whoToFollow.map((user, idx) => (
             <li key={idx} className="flex items-center justify-between py-2 hover:scale-105 px-2 rounded cursor-pointer transition-all">
               <div className="flex items-center gap-3">
-                <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
+                <Image src={user.avatar} alt={user.name} width={40} height={40} className="w-10 h-10 rounded-full" />
                 <div className="flex flex-col">
                   <span className="font-medium">{user.name}</span>
                   <span className="text-gray-500 text-sm">@{user.username}</span>

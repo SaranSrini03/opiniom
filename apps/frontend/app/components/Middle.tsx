@@ -1,5 +1,6 @@
 // components/Middle.tsx
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { 
   HiOutlinePhotograph, 
   HiOutlineChartBar, 
@@ -166,9 +167,11 @@ const Middle = () => {
       {/* Create Post */}
       <div className="p-4 border-b border-gray-800">
         <div className="flex gap-3">
-          <img 
+          <Image 
             src="https://i.pravatar.cc/40" 
             alt="avatar" 
+            width={48}
+            height={48}
             className="w-12 h-12     rounded-full flex-shrink-0" 
           />
           <div className="flex-1">
@@ -217,9 +220,11 @@ const Middle = () => {
             className="p-4 border-b border-gray-800 hover:bg-gray-950 transition-colors cursor-pointer"
           >
             <div className="flex gap-3">
-              <img 
+              <Image 
                 src={post.avatar} 
                 alt={post.username} 
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full flex-shrink-0" 
               />
               <div className="flex-1 min-w-0">
@@ -234,9 +239,11 @@ const Middle = () => {
                 {/* Media */}
                 {post.media && (
                   <div className="mt-3 rounded-2xl overflow-hidden border border-gray-800">
-                    <img 
+                    <Image 
                       src={post.media} 
                       alt="Post media" 
+                      width={500}
+                      height={300}
                       className="w-full h-auto object-cover"
                     />
                   </div>
